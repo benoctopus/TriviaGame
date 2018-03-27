@@ -49,11 +49,11 @@ window.gameEnv = {
     let parameters = [];
     let i = 0;
     while (parameters.length < 5) {
-      let category = Math.floor(Math.random() * (18 - 9) + 9).toString();
+      let category = Math.floor(Math.random() * (32 - 9) + 9).toString();
       let difficulty;
       let duplicate = false;
       for (let value of parameters) {
-        if (value.indexOf(category) > -1) {
+        if (value[0].indexOf(category) > -1) {
           duplicate = true;
           break;
         }
@@ -68,7 +68,7 @@ window.gameEnv = {
         else {
           difficulty = "hard"
         }
-        parameters.push([category, difficulty, "20"]);
+        parameters.push([category, difficulty, "15"]);
         i++;
       }
     }
@@ -78,22 +78,14 @@ window.gameEnv = {
   startArena: function() {
     let parameters = this.generateParameters();
     console.log(parameters);
+    parameters.forEach(function(element) {
+      gameEnv.getTrivia(element[0], element[2], element[1], parameters);
+    })
 
   },
 
 
-  getTrivia: function(category, amount, difficulty) {
-    console.log(category);
-    // if (typeof gameEnv.session === "undefined") {
-    //   $.ajax({
-    //     url: "https://opentdb.com/api_token.php?command=request",
-    //     method: "get"
-    //   }).then(function(response) {
-    //     gameEnv.session = response.token;
-    //     gameEnv.getTrivia(category, amount, difficulty)
-    //   });
-    // }
-
+  getTrivia: function(category, amount, difficulty, parameters) {
     $.ajax({
       url: "https://opentdb.com/api.php?"
       + `category=${category}&`
@@ -103,13 +95,35 @@ window.gameEnv = {
       method: "GET"
     }).then(function(response) {
       console.log(response.response_code);
-      let trivia = {
-        questions: response.results,
-        category: category,
-        amount: amount,
-        difficulty: difficulty,
-      };
-      gameEnv.triviaQue.push(trivia);
+      if (response.response_code > 0) {
+        let adjust = parseInt(category);
+        let exit = false;
+        while (!exit) {
+          if (adjust < 33) {
+            adjust++;
+          }
+          else{
+            adjust = 9;
+          }
+          for (let value of parameters) {
+            if ((!value[0].indexOf(adjust.toString()) > -1)) {
+              exit = true;
+            }
+          }
+          if (exit) {
+            gameEnv.getTrivia(adjust.toString(), amount, difficulty, parameters);
+          }
+        }
+      }
+      else {
+        let trivia = {
+          questions: response.results,
+          category: category,
+          amount: amount,
+          difficulty: difficulty,
+        };
+        gameEnv.triviaQue.push(trivia);
+      }
     });
   },
 
