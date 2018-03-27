@@ -1,19 +1,21 @@
-// const queryUrl = "https://opentdb.com/api.php?";
-//
-// class Trivia {
-//   constructor(category, amount) {
-//     $.ajax({
-//       url: `https://opentdb.com/api.php?amount=${amount}&category=${category}`,
-//       method: "get",
-//     }).then(function(response) {
-//       console.log(response);
-//       window.b = response;
-//     })
-//   }
-//
-// }
+const queryUrl = "https://opentdb.com/api.php?";
 
-// $(document).ready($(document.body).fadeIn(1000));
+class Trivia {
+  constructor(category, amount) {
+    $.ajax({
+      url: `https://opentdb.com/api.php?amount=${amount}&category=${category}`,
+      method: "get",
+    }).then(function(response) {
+      console.log(response);
+      window.b = response;
+    })
+  }
+
+}
+
+$(document).ready($("#page-title").fadeIn(500, function() {
+  $("#setup").fadeIn(500)
+}));
 
 
 
