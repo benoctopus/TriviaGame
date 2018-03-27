@@ -1,6 +1,76 @@
+body {
+}
+
+* {
+    font-family: 'Raleway', sans-serif;
+}
+
+p {
+    border: none;
+}
+
 h1, h2, h3 {
     font-family: 'Poiret One', cursive;
     color: gray();
+}
+
+body {
+
+}
+
+.card-body {
+    border: solid lightgray 1px;
+    margin: 32px 20px 28px 20px;
+    overflow: auto;
+}
+
+.card-body {}
+
+.form {
+    height: 68px;
+}
+.crd-t {
+    text-align: center;
+    font-size: 58px;
+    font-style: oblique;
+}
+
+.modifiers {
+    MARGIN-TOP: 62px;
+}
+
+.card-text {
+    padding: 30px;
+    font-size: 28px;
+}
+
+.card-instructions {
+
+}
+
+.card-details {
+    position: relative;
+    width: 277px;
+    float:  left;
+    padding-bottom: 24px;
+}
+
+.arena {
+    position: relative;
+    float: right;
+    height: 87px;
+    width: 25%;
+    font-size:  3vw;
+    margin-right: 4%;
+    font-style: italic;
+    font-weight:  bold;
+    font-family: 'Poiret One', cursive;
+}
+
+#trivia-box, #setup, #startup{
+    display: none;
+    margin-top: 19px;
+    height: auto;
 }
 
 #page-title {
@@ -9,24 +79,9 @@ h1, h2, h3 {
     letter-spacing: 19px;
     border-bottom: solid gray 2px;
     background: beige;
-    margin: 0 -15px 0 -15px;
-    padding: 5px;
+    margin: 0 -15px 5px -15px;
+    padding: 5px 5px -15px 5px;
     background-image: none;
     display: none;
-}
-body {
-    background: beige;
-
-}
-
-.card-body {
-    border: solid lightgray 1px;
-    margin: 20px;
-}
-
-#trivia-box, #setup {
-    display: none;
-    margin-top: 60px;
-    height: 200px;
 }
 
