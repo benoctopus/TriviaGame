@@ -1,23 +1,3 @@
-class Trivia {
-  constructor(category, amount, difficulty) {
-    this.category = category;
-    this.amount = amount;
-    this.difficulty = difficulty;
-    this.questions = this.getTrivia()
-  }
-  getTrivia() {
-    $.ajax({
-      url: "https://opentdb.com/api.php?"
-      + `category=${this.category}&`
-      + `amount=${this.amount}&`
-      + `$difficulty${this.difficulty}`,
-      method: "GET"
-    }).then(function(response) {
-      return response;
-    });
-  }
-}
-
 window.gameEnv = {
   triviaQue: [],
   triviaApi: "https://opentdb.com/api.php?",
@@ -68,10 +48,17 @@ window.gameEnv = {
   generateParameters: function() {
     let parameters = [];
     let i = 0;
-    while (parameters.length < 6) {
-      let catagory = Math.floor(Math.random() * (18 - 9) + 9);
+    while (parameters.length < 5) {
+      let category = Math.floor(Math.random() * (18 - 9) + 9).toString();
       let difficulty;
-      if (parameters.indexof(catagory) < 0) {
+      let duplicate = false;
+      for (let value of parameters) {
+        if (value.indexOf(category) > -1) {
+          duplicate = true;
+          break;
+        }
+      }
+      if (!duplicate) {
         if (i < 1) {
           difficulty = "easy"
         }
@@ -81,7 +68,7 @@ window.gameEnv = {
         else {
           difficulty = "hard"
         }
-        parameters.push([catagory.toString(), difficulty, "20"]);
+        parameters.push([category, difficulty, "20"]);
         i++;
       }
     }
