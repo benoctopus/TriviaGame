@@ -1,4 +1,7 @@
 window.gameEnv = {
+  answers: $(".answer"),
+  triviaBox: $("#trivia-box"),
+  startMenu: $("#startup"),
   triviaQue: [],
   triviaApi: "https://opentdb.com/api.php?",
   imgApi: "https://api.unsplash.com/?" +
@@ -10,8 +13,13 @@ window.gameEnv = {
     //initial display
     function () {
       $("#page-title").fadeIn(500, function () {
-        $("#startup").fadeIn(500, gameEnv.setup());
+        gameEnv.startMenu.fadeIn(500, gameEnv.setup());
       });
+    },
+
+    function () {
+      console.log("here");
+      gameEnv.triviaBox.fadeIn(500);
     }
   ],
 
@@ -40,7 +48,7 @@ window.gameEnv = {
       }
     });
     if (!complete) {
-      return
+      return;
     }
     this.getTrivia(category, amount, difficulty)
   },
@@ -76,13 +84,116 @@ window.gameEnv = {
   },
 
   startArena: function() {
+    this.round = 1;
+    this.arenaReady = false;
+    this.mode = "arena";
     let parameters = this.generateParameters();
     console.log(parameters);
-    parameters.forEach(function(element) {
+    parameters.forEach(function (element) {
       gameEnv.getTrivia(element[0], element[2], element[1], parameters);
-    })
-
+    });
+    this.startMenu.fadeOut(500, this.ajaxWait());
   },
+
+  ajaxWait: function() {
+    if (gameEnv.arenaReady) {
+      console.log("here");
+      gameEnv.display[1]();
+      gameEnv.number = 1;
+      $("#round").text(`Round: ${gameEnv.round}`);
+      $("#cat").text(gameEnv.triviaQue[0].questions[0].category);
+      $("#number").text(`#: ${gameEnv.number}`);
+      gameEnv.loadQuestion();
+    }
+    else {
+      console.log("waiting...");
+      let a = setTimeout(gameEnv.ajaxWait, 150);
+    }
+  },
+
+  loadQuestion: function() {
+    if (typeof this.triviaQue[0].questions[0] === "undefined") {
+      this.round++;
+      this.triviaQue.splice(0, 1);
+      this.ajaxWait();
+    }
+    this.current = this.triviaQue[0].questions[0];
+    let ansSet = $(".answer");
+    let i = 0;
+    let j = 0;
+    let order = this.shuffle([1, 2, 3, 4]);
+    this.current.incorrect_answers = this.shuffle(this.current.incorrect_answers);
+    if (this.current.type === "boolean") {
+      $("#ans-1").text("True");
+      $("#ans-2").text("False");
+      if (gameEnv.current.correct_answer === "True") {
+        $("#ans-1").attr("data-win", "win");
+        $("#ans-2").attr("data-win", "loose")
+      }
+      else {
+        $("#ans-2").attr("data-win", "win");
+        $("#ans-1").attr("data-win", "loose")
+      }
+      $("#ans-3, #ans-4").css("display", "none");
+      $("#answer-feild").fadeIn(250);
+    }
+    else {
+      ansSet.each(function () {
+        $(".answer").css("display", "block");
+        $(".answer").css("display", "list-item");
+        console.log($(this));
+        if (order[i] === 1) {
+          $(this).text(
+            htmlFixer(
+              gameEnv.current.correct_answer)
+          ).attr("data-win", "win");
+        }
+        else{
+          $(this).text(
+            htmlFixer(
+              gameEnv.current.incorrect_answers[j])
+          ).attr("data-win", "loose");
+          j++
+        }
+        i++;
+      });
+      $("#answer-feild").fadeIn(250);
+    }
+    gameEnv.triviaQue[0].questions.splice(0,1);
+    //win/loose
+    $("#question").text(htmlFixer(gameEnv.current.question));
+    $("li").on("click", function () {
+      let cAns = $(this);
+      console.log(cAns.attr("data-win"));
+      if (cAns.attr("data-win") === "win") {
+        gameEnv.number++;
+        cAns.addClass("correct-answer");
+        setTimeout(function () {
+          cAns.removeClass("correct-answer")
+        }, 500);
+        $("#number").text(`#: ${gameEnv.number}`);
+        cAns.attr("data-win", "");
+        console.log("correct");
+        $("#question").text("Correct");
+        $("#answer-feild").fadeOut(500, function () {
+          gameEnv.loadQuestion();
+        });
+      }
+    });
+  },
+
+  shuffle: function(array) {
+    let currentIndex = array.length, temporaryValue, randomIndex;
+    while (0 !== currentIndex) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+    return array;
+  },
+
 
 
   getTrivia: function(category, amount, difficulty, parameters) {
@@ -123,6 +234,7 @@ window.gameEnv = {
           difficulty: difficulty,
         };
         gameEnv.triviaQue.push(trivia);
+        gameEnv.arenaReady = true;
       }
     });
   },
@@ -152,3 +264,12 @@ window.gameEnv = {
 
 $(document).ready(gameEnv.initialize());
 
+function htmlFixer(string) {
+  let ret = string.replace(/&quot;/g, '"');
+  ret = ret.replace(/&amp;/g, '&');
+  ret = ret.replace(/&#039;/g, "'");
+  ret = ret.replace(/&oacute;/g, "o");
+  ret = ret.replace(/&iacute;/g, "i");
+  return ret;
+
+}

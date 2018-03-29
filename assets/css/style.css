@@ -18,6 +18,13 @@ body {
 
 }
 
+.answer {font-size: 36px;vertical-align: middle;width: fit-content;}
+
+#question {
+    margin left:;
+    margin-left:;
+    margin-left: 25px;
+}
 .card-body {
     border: solid lightgray 1px;
     margin: 32px 20px 28px 20px;
@@ -60,17 +67,32 @@ body {
     float: right;
     height: 87px;
     width: 25%;
-    font-size:  3vw;
+    font-size: 3vw;
     margin-right: 4%;
     font-style: italic;
-    font-weight:  bold;
+    font-weight: bold;
     font-family: 'Poiret One', cursive;
 }
 
-#trivia-box, #setup, #startup{
+.correct-answer {
+    background: green;
+}
+
+#trivia-box, #setup, #startup {
     display: none;
     margin-top: 19px;
     height: auto;
+}
+
+#trivia-box {
+    height: auto !important;
+    margin-top: 174px;
+}
+
+#answer-feild {
+    height: auto;
+    margin-top: 52px;
+    display: none;
 }
 
 #page-title {

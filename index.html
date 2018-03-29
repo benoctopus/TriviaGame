@@ -5,6 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <title>Document</title>
     <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
     <link href="https://fonts.googleapis.com/css?family=Poiret+One|Raleway" rel="stylesheet">
@@ -48,10 +49,13 @@
             <!--</div>-->
         <!--</div>-->
         <div class="col-11 col-md-10 col-lg-8 card" id="trivia-box">
-            <div class="card-title">
-                <h2>card title</h2>
+            <div class="card-title row justify-content-around">
+                <h2 id="round" class="col-3">card title</h2>
+                <h2 id="cat" class="col-6" style="text-align: center">card title</h2>
+                <h2 id="number" class="col-3"style="text-align: right">card title</h2>
             </div>
-            <div class="card-body">
+            <h3 id="question"></h3>
+            <div id="answer-feild" class="card-body">
                 <ol class= "" type="A">
                     <li id="ans-1" class="answer">one</li>
                     <li id="ans-2" class="answer">one</li>
