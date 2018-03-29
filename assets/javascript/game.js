@@ -1,4 +1,5 @@
 class Clock {
+  //question timer
   constructor(time) {
     this.clockRunning = false;
     this.time = undefined;
@@ -9,13 +10,14 @@ class Clock {
   }
 
   set() {
-    this.clockRunning = true;
+    //set clock and interval
     this.clockElement.text(`Time Remaining: ${this.currentTime}`);
     this.clockRow.css("display", "block");
     this.clockInterval = setInterval(this.decrement.bind(this), 1000)
   }
 
   decrement() {
+    // time --
     if (this.currentTime < 1) {
       clearInterval(this.clockInterval);
       $("#question").text("OUT OF TIME");
@@ -28,7 +30,6 @@ class Clock {
       });
       $("li").removeEventListener();
     }
-
     this.currentTime--;
     this.clockElement.text(`Time Remaining: ${this.currentTime.toString()}`);
   }
@@ -51,16 +52,19 @@ window.gameEnv = {
   display: [
     //initial display
     function () {
+    //0 start
       $("#page-title").fadeIn(500, function () {
         gameEnv.startMenu.fadeIn(500, gameEnv.setup());
       });
     },
 
     function () {
+    //1 game
       gameEnv.triviaBox.fadeIn(600);
     },
 
     function() {
+    //2 round change
       gameEnv.triviaBox.fadeOut(600, function () {
         $("#roundUp").fadeIn(600, function () {
           debugger;
@@ -74,6 +78,7 @@ window.gameEnv = {
     },
 
     function () {
+    //3 endgame
       $("#clock-row").fadeOut(500);
       $("#trivia-box").fadeOut(500, function() {
         $("#finalH").text("Final Results");
@@ -92,6 +97,7 @@ window.gameEnv = {
   ],
 
   initialize: function () {
+    //starts runtime
     this.display[0]();
   },
 
@@ -123,6 +129,7 @@ window.gameEnv = {
   // },
 
   generateParameters: function(num) {
+    //create parameters array for getOptions
     let parameters = [];
     let i = 0;
     while (parameters.length < num) {
@@ -135,6 +142,7 @@ window.gameEnv = {
           break;
         }
       }
+      //ensure unique
       if (!duplicate) {
         if (i < 1) {
           difficulty = "easy"
@@ -153,12 +161,13 @@ window.gameEnv = {
   },
 
   startArena: function() {
+    //initialize arena game Mode
     this.correct = 0;
     this.incorrect = 0;
     gameEnv.round = 0;
     this.arenaReady = false;
     this.mode = "arena";
-    let parameters = this.generateParameters(2);
+    let parameters = this.generateParameters(5);
     parameters.forEach(function (element) {
       gameEnv.getTrivia(element[0], element[2], element[1], parameters);
     });
@@ -166,6 +175,9 @@ window.gameEnv = {
   },
 
   ajaxWait: function() {
+    //start game when atleast one round is ready
+    //processes round change
+    //check if gameover then execute
     if (gameEnv.arenaReady) {
       clearInterval(this.clock.clockInterval);
 
@@ -205,7 +217,7 @@ window.gameEnv = {
               $("#number").text(`#: ${gameEnv.number}`);
               gameEnv.loadQuestion();
             });
-          }, 750)
+          }, 1500)
         })
       });
     }
@@ -215,6 +227,7 @@ window.gameEnv = {
   },
 
   setAnswers() {
+    //bind answers and quetion resplonse from api to html elements
     this.current = this.triviaQue[0].questions[0];
     let ansSet = $(".answer");
     let i = 0;
@@ -259,6 +272,7 @@ window.gameEnv = {
   },
 
   loadQuestion: function() {
+    //next question //listener initialization & reset
     if (typeof this.triviaQue[0].questions[0] === "undefined") {
       clearInterval(gameEnv.clock.clockInterval);
       this.triviaQue.splice(0, 1);
@@ -316,6 +330,7 @@ window.gameEnv = {
   },
 
   shuffle: function(array) {
+    //randomize array
     let currentIndex = array.length, temporaryValue, randomIndex;
     while (0 !== currentIndex) {
       randomIndex = Math.floor(Math.random() * currentIndex);
@@ -330,6 +345,7 @@ window.gameEnv = {
 
 
   getTrivia: function(category, amount, difficulty, parameters) {
+    //send ajax for trivia questions
     $.ajax({
       url: "https://opentdb.com/api.php?"
       + `category=${category}&`
@@ -373,6 +389,7 @@ window.gameEnv = {
 
 
   setup: function() {
+    //title menu event listener
     $(".btn").on("click", function () {
       switch ($(this).val()) {
         case "arena":
@@ -398,6 +415,7 @@ window.gameEnv = {
 $(document).ready(gameEnv.initialize());
 
 function htmlFixer(string) {
+  //fix html charecters for $.text
   let ret = string.replace(/&quot;/g, '"');
   ret = ret.replace(/&amp;/g, '&');
   ret = ret.replace(/&#039;/g, "'");
