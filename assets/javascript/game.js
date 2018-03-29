@@ -246,7 +246,7 @@ window.gameEnv = {
         clearInterval(this.clock.clockInterval);
       }
 
-      this.clock = new Clock(7);
+      this.clock = new Clock(10);
       gameEnv.triviaQue[0].questions.splice(0, 1);
 
       //win/loose

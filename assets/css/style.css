@@ -60,9 +60,10 @@ img {
 }
 
 .card-details {
+
     position: relative;
     width: 277px;
-    float:  left;
+    float: left;
     padding-bottom: 24px;
 }
 
@@ -94,6 +95,7 @@ img {
 
 #roundUp {
     display: none;
+    margin-top: 20px;
 }
 
 #clock {
