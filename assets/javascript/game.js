@@ -423,6 +423,7 @@ function htmlFixer(string) {
   ret = ret.replace(/&iacute;/g, "i");
   ret = ret.replace(/&rsquo;/g, "`");
   ret = ret.replace(/&eacute;/g, "`");
+  ret = ret.replace(/&tilde;/g, "`");
   return ret;
 
 }
