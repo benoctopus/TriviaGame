@@ -59,7 +59,19 @@ window.gameEnv = {
 
     function () {
       console.log("here");
-      gameEnv.triviaBox.fadeIn(500);
+      gameEnv.triviaBox.fadeIn(600);
+    },
+
+    function() {
+      gameEnv.triviaBox.fadeOut(600, function () {
+        $("#roundUp").fadeIn(600, function () {
+          setTimeout(function () {
+            $("#roundUp").fadeOut(600);
+            gameEnv.loadQuestion.bind(gameEnv)();
+          })
+        })
+
+      });
     }
   ],
 
@@ -127,7 +139,7 @@ window.gameEnv = {
   startArena: function() {
     this.correct = 0;
     this.incorrect = 0;
-    this.round = 1;
+    this.round = 0;
     this.arenaReady = false;
     this.mode = "arena";
     let parameters = this.generateParameters();
@@ -140,15 +152,35 @@ window.gameEnv = {
 
   ajaxWait: function() {
     if (gameEnv.arenaReady) {
-      this.roundCorrect = 0;
-      this.roundIncorrect = 0;
+      clearInterval(this.clock.clockInterval);
+      gameEnv.round++;
       console.log("here");
-      gameEnv.display[1]();
-      gameEnv.number = 1;
-      $("#round").text(`Round: ${gameEnv.round}`);
-      $("#cat").text(gameEnv.triviaQue[0].questions[0].category);
-      $("#number").text(`#: ${gameEnv.number}`);
-      gameEnv.loadQuestion();
+      gameEnv.triviaBox.fadeOut(600, function () {
+        $("#roundH").text(`Round: ${gameEnv.round}`);
+        if (gameEnv.round > 1) {
+          $("#round-stats").text(`Last Round Score: ${
+          Math.floor((gameEnv.roundCorrect / 15) * 100) + "%"
+            }`);
+        }
+        else {
+          $("#round-stats").text("   ");
+
+        }
+        $("#roundUp").fadeIn(600, function () {
+          setTimeout(function () {
+            $("#roundUp").fadeOut(600, function () {
+              gameEnv.roundCorrect = 0;
+              gameEnv.roundIncorrect = 0;
+              gameEnv.display[1]();
+              gameEnv.number = 1;
+              $("#round").text(`Round: ${gameEnv.round}`);
+              $("#cat").text(gameEnv.triviaQue[0].questions[0].category);
+              $("#number").text(`#: ${gameEnv.number}`);
+              gameEnv.loadQuestion();
+            });
+          }, 750)
+        })
+      });
     }
     else {
       console.log("waiting...");
@@ -203,14 +235,17 @@ window.gameEnv = {
 
   loadQuestion: function() {
     if (typeof this.triviaQue[0].questions[0] === "undefined") {
+      // $("li").off("click");
       clearInterval(gameEnv.clock.clockInterval);
-      this.round++;
       this.triviaQue.splice(0, 1);
       this.ajaxWait();
     }
     else {
       this.setAnswers();
-      // clearInterval(this.clock.clockInterval);
+      if (typeof gameEnv.clock !== "undefined") {
+        clearInterval(this.clock.clockInterval);
+      }
+
       this.clock = new Clock(7);
       gameEnv.triviaQue[0].questions.splice(0, 1);
 
@@ -225,6 +260,7 @@ window.gameEnv = {
           cAns.attr("data-win", "");
           $("#question").text("Correct");
           cAns.addClass("correct-answer");
+          $("li").off("click");
           setTimeout(function () {
             cAns.removeClass("correct-answer")
           }, 500);
@@ -235,6 +271,7 @@ window.gameEnv = {
           gameEnv.roundIncorrect++;
           $("#question").text("Wrong!");
           cAns.addClass("wrong-answer");
+          $("li").off("click");
           setTimeout(function () {
             cAns.removeClass("wrong-answer")
           }, 500);
@@ -248,10 +285,9 @@ window.gameEnv = {
           $("#number").text(`#: ${gameEnv.number}`);
         }
         console.log("correct");
-        $("#answer-feild").fadeOut(500, function () {
+        $("#answer-feild").fadeOut(600, function () {
           gameEnv.loadQuestion();
         });
-        $("li").removeEventListener();
       });
     }
   },

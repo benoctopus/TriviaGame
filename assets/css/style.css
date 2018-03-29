@@ -14,10 +14,15 @@ h1, h2, h3 {
     color: gray();
 }
 
-body {
-
+img {
+    position: fixed;
+    width: 100%;
+    height: 100%;
 }
 
+.card {
+    background: #f0f0f0f5;
+}
 .answer {font-size: 36px;vertical-align: middle;width: fit-content;}
 
 #question {
@@ -87,6 +92,10 @@ body {
     height: auto;
 }
 
+#roundUp {
+    display: none;
+}
+
 #clock {
 
 }
@@ -101,13 +110,14 @@ body {
 
 #trivia-box {
     height: auto !important;
-    margin-top: 174px;
+    margin-top: 95px;
 }
 
 #answer-feild {
     height: auto;
     margin-top: 52px;
     display: none;
+    background: white;
 }
 
 #page-title {
@@ -115,7 +125,7 @@ body {
     font-weight: bold;
     letter-spacing: 19px;
     border-bottom: solid gray 2px;
-    background: beige;
+    background: #ffffffed;
     margin: 0 -15px 5px -15px;
     padding: 5px 5px -15px 5px;
     display: none;
