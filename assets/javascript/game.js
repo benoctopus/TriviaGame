@@ -65,6 +65,7 @@ window.gameEnv = {
     function() {
       gameEnv.triviaBox.fadeOut(600, function () {
         $("#roundUp").fadeIn(600, function () {
+          debugger;
           setTimeout(function () {
             $("#roundUp").fadeOut(600);
             gameEnv.loadQuestion.bind(gameEnv)();
@@ -72,6 +73,23 @@ window.gameEnv = {
         })
 
       });
+    },
+
+    function () {
+      $("#clock-row").fadeOut(500);
+      $("#trivia-box").fadeOut(500, function() {
+        $("#finalH").text("Final Results");
+        $("#final-stats").text(`Score: 
+        ${Math.floor((gameEnv.correct / 75) * 100)}`
+         + "%");
+        $("#final").fadeIn(500, function () {
+          setTimeout(function () {
+            $("#final").fadeOut(500, function () {
+              window.location.reload();
+            });
+          }, 3000);
+        });
+      })
     }
   ],
 
@@ -106,10 +124,10 @@ window.gameEnv = {
   //   this.getTrivia(category, amount, difficulty)
   // },
 
-  generateParameters: function() {
+  generateParameters: function(num) {
     let parameters = [];
     let i = 0;
-    while (parameters.length < 5) {
+    while (parameters.length < num) {
       let category = Math.floor(Math.random() * (32 - 9) + 9).toString();
       let difficulty;
       let duplicate = false;
@@ -139,10 +157,10 @@ window.gameEnv = {
   startArena: function() {
     this.correct = 0;
     this.incorrect = 0;
-    this.round = 0;
+    gameEnv.round = 0;
     this.arenaReady = false;
     this.mode = "arena";
-    let parameters = this.generateParameters();
+    let parameters = this.generateParameters(2);
     console.log(parameters);
     parameters.forEach(function (element) {
       gameEnv.getTrivia(element[0], element[2], element[1], parameters);
@@ -153,17 +171,30 @@ window.gameEnv = {
   ajaxWait: function() {
     if (gameEnv.arenaReady) {
       clearInterval(this.clock.clockInterval);
-      gameEnv.round++;
+
+      if (typeof  gameEnv.triviaQue[0] === "undefined") {
+        gameEnv.triviaQue = [];
+        gameEnv.current = "";
+        gameEnv.round = 0;
+        $("#roundH").text("Round: 1");
+        $("#round-stats").text("  ");
+        gameEnv.display[3]();
+        return;
+      }
+      // gameEnv.round++;
       console.log("here");
       gameEnv.triviaBox.fadeOut(600, function () {
-        $("#roundH").text(`Round: ${gameEnv.round}`);
-        if (gameEnv.round > 1) {
+        if (gameEnv.round >= 1) {
+          gameEnv.round++;
+          $("#roundH").text(`Round: ${window.gameEnv.round}`);
           $("#round-stats").text(`Last Round Score: ${
           Math.floor((gameEnv.roundCorrect / 15) * 100) + "%"
             }`);
         }
-        else {
+        else if (gameEnv.round < 1) {
+          $("#roundH").text(`Round: 1`);
           $("#round-stats").text("   ");
+          gameEnv.round = 1
 
         }
         $("#roundUp").fadeIn(600, function () {
@@ -240,6 +271,7 @@ window.gameEnv = {
       this.triviaQue.splice(0, 1);
       this.ajaxWait();
     }
+
     else {
       this.setAnswers();
       if (typeof gameEnv.clock !== "undefined") {
@@ -382,6 +414,7 @@ function htmlFixer(string) {
   ret = ret.replace(/&oacute;/g, "o");
   ret = ret.replace(/&iacute;/g, "i");
   ret = ret.replace(/&rsquo;/g, "`");
+  ret = ret.replace(/&eacute;/g, "`");
   return ret;
 
 }
