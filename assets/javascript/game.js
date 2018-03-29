@@ -18,7 +18,7 @@ class Clock {
   decrement() {
     if (this.currentTime < 1) {
       clearInterval(this.clockInterval);
-      $("#question").text("OUT OF TIME");console.log("correct");
+      $("#question").text("OUT OF TIME");
       $("#answer-feild").fadeOut(750, function () {
         gameEnv.number++;
         $("#number").text(`#: ${gameEnv.number}`);
@@ -30,7 +30,6 @@ class Clock {
     }
 
     this.currentTime--;
-    console.log(this);
     this.clockElement.text(`Time Remaining: ${this.currentTime.toString()}`);
   }
 
@@ -58,7 +57,6 @@ window.gameEnv = {
     },
 
     function () {
-      console.log("here");
       gameEnv.triviaBox.fadeIn(600);
     },
 
@@ -161,7 +159,6 @@ window.gameEnv = {
     this.arenaReady = false;
     this.mode = "arena";
     let parameters = this.generateParameters(2);
-    console.log(parameters);
     parameters.forEach(function (element) {
       gameEnv.getTrivia(element[0], element[2], element[1], parameters);
     });
@@ -182,7 +179,6 @@ window.gameEnv = {
         return;
       }
       // gameEnv.round++;
-      console.log("here");
       gameEnv.triviaBox.fadeOut(600, function () {
         if (gameEnv.round >= 1) {
           gameEnv.round++;
@@ -214,7 +210,6 @@ window.gameEnv = {
       });
     }
     else {
-      console.log("waiting...");
       let a = setTimeout(gameEnv.ajaxWait, 150);
     }
   },
@@ -244,7 +239,6 @@ window.gameEnv = {
       ansSet.each(function () {
         ansSet.css("display", "block");
         ansSet.css("display", "list-item");
-        console.log($(this));
         if (order[i] === 1) {
           $(this).text(
             htmlFixer(
@@ -266,7 +260,6 @@ window.gameEnv = {
 
   loadQuestion: function() {
     if (typeof this.triviaQue[0].questions[0] === "undefined") {
-      // $("li").off("click");
       clearInterval(gameEnv.clock.clockInterval);
       this.triviaQue.splice(0, 1);
       this.ajaxWait();
@@ -285,7 +278,6 @@ window.gameEnv = {
       $("#question").text(htmlFixer(gameEnv.current.question));
       $("li").on("click", function () {
         let cAns = $(this);
-        console.log(cAns.attr("data-win"));
         if (cAns.attr("data-win") === "win") {
           gameEnv.correct++;
           gameEnv.roundCorrect++;
@@ -316,7 +308,6 @@ window.gameEnv = {
         if (gameEnv.number < 16) {
           $("#number").text(`#: ${gameEnv.number}`);
         }
-        console.log("correct");
         $("#answer-feild").fadeOut(600, function () {
           gameEnv.loadQuestion();
         });
@@ -347,7 +338,6 @@ window.gameEnv = {
       // + `token=${gameEnv.session}`,
       method: "GET"
     }).then(function(response) {
-      console.log(response.response_code);
       if (response.response_code > 0) {
         let adjust = parseInt(category);
         let exit = false;
