@@ -1,6 +1,9 @@
 # TriviaGame
 
 Simple trivia game with time questions.
+
+Deployed: https://benoctopus.github.io/trivia-game
+
 ## instructions
 
 The game is playable with only the click of the mouse. First the player chooses their game type (currently only 'arena' is supported). The game then starts. Each round is denoted by the banner shown at it's start. The game ends when all questions have been answered or timed out 
